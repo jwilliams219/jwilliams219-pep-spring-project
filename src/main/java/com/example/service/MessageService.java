@@ -34,8 +34,12 @@ public class MessageService {
         return null;
     }
 
-    public void deleteMessage(int id) {
+    public int deleteMessage(int id) {
+        if (!messageRepository.existsById(id)) {
+            return 0;
+        }
         messageRepository.deleteById(id);
+        return 1;
     }
 
     public Message addMessage(Message message) {
@@ -59,4 +63,7 @@ public class MessageService {
         }
     }
 
+    public List<Message> findMessagesByUser(int postedById) {
+        return messageRepository.findMessagesByUser(postedById);
+    }
 }
