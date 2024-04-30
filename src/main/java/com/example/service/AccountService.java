@@ -23,6 +23,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
+    /**
+     * Create a new account in JPA repository
+     * @param newAccount
+     * @return the account if created
+     */
     public Account register(Account newAccount) {
         Optional<Account> existingAccount = accountRepository.findByUsername(newAccount.getUsername());
         if (existingAccount.isPresent()) {
@@ -31,6 +36,12 @@ public class AccountService {
         return accountRepository.save(newAccount);
     }
 
+    /**
+     * @param username
+     * @param password
+     * @return account if authenticated
+     * @throws AuthenticationException if not authenticated properly
+     */
     public Account login(String username, String password) throws AuthenticationException {
         Optional<Account> account = accountRepository.findByUsernameAndPassword(username, password);
         if (account.isPresent()) {
@@ -39,6 +50,11 @@ public class AccountService {
         throw new AuthenticationException("Invalid credentials");
     }
 
+    /**
+     * Check if account with param id exists in the db
+     * @param id
+     * @return true if exists, else false
+     */
     public boolean accountExists(int id) {
         if (accountRepository.findById(id).isPresent()) {
             return true;

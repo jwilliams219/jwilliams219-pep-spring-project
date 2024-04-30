@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import javax.naming.AuthenticationException;
+
 import org.springframework.dao.DataIntegrityViolationException;
 
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import com.example.entity.*;
 import java.util.*;
 
 /**
- * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
+ * Write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
  * found in readme.md as well as the test cases. You be required to use the @GET/POST/PUT/DELETE/etc Mapping annotations
  * where applicable as well as the @ResponseBody and @PathVariable annotations. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
@@ -49,15 +50,10 @@ public class SocialMediaController {
     /*
      * 2: Our API should be able to process User logins
      */
-    public class LoginRequest {
-        String username;
-        String password;
-    }
-
     @PostMapping("login")
     public ResponseEntity<Account> login(@RequestBody LoginRequest loginRequest) {
         try {
-            Account account = accountService.login(loginRequest.username, loginRequest.password);
+            Account account = accountService.login(loginRequest.getUsername(), loginRequest.getPassword());
             return new ResponseEntity<>(account, HttpStatus.OK);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -114,6 +110,7 @@ public class SocialMediaController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
+            newMessage.setMessageId(messageId);
             messageService.patchMessage(newMessage);
             return new ResponseEntity<>(1, HttpStatus.OK);
         } catch (Exception e) {
@@ -128,4 +125,5 @@ public class SocialMediaController {
     public ResponseEntity<List<Message>> findMessagesByUser(@PathVariable int accountId) {
         return new ResponseEntity<>(messageService.findMessagesByUser(accountId), HttpStatus.OK);
     }
+
 }
